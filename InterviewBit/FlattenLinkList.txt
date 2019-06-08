@@ -1,0 +1,66 @@
+/*
+struct ListNode {
+    int val;
+    ListNode *right,*down;
+    ListNode(int x) {
+        val = x;
+        right = down = NULL;
+    }
+};
+*/
+
+ListNode *merge(ListNode *a, ListNode *b)
+{
+    ListNode *head = NULL;
+    ListNode *p = a;
+    ListNode *q = b;
+    if(p->val <= q->val)
+    {
+        head = p;
+        p = p->down;
+    }
+    else if(p->val > q->val)
+    {
+        head = q;
+        q = q->down;
+    }
+    ListNode  *node = head;
+    while(p && q)
+    {
+        if(p->val <= q->val)
+        {
+            node->down = p;
+            p = p->down;
+            node = node->down;
+        }
+        else if(p->val > q->val)
+        {
+            node->down = q;
+            q = q->down;
+            
+            node = node->down;
+        }
+    }
+    if(p)
+    {
+        node->down = p;
+    }
+    else if(q)
+    {
+        node -> down = q;
+        // head = head->next;
+    }
+    return head;
+}
+ListNode *fxn(ListNode* head)
+{
+    if(head == NULL || head ->right == NULL)
+    {
+        return head;
+    }
+    return merge(head, fxn(head->right));
+}
+ListNode* flatten (ListNode* root) {
+    ListNode *head = root;
+    return fxn(head);
+}
